@@ -1,0 +1,102 @@
+How flutter works
+
+flutter have three main trees :-
+    Widget Tree, Element Tree , Render Tree 
+    The Widget tree store the configuration of widget eg(size, color etc.).
+
+    The Element tree is another tree and that contains similar widget
+    but it is Empty box and don't sotre any configuration and it is linked to
+    widget tree. The widget tree is build very often but the Element tree does not.
+
+    How and Element tree is made when the app start first time and found
+    and there is a widget in widget tree and not available in Element tree.
+    Then flutter Flutter create an copy of that widget/Element in element tree.
+    The Element tree is finlay connected to render tree. Which actually shows
+    the widget on the screen.
+
+    For a stateful widget the element tree create an element of that stateful widget
+    but also creates a state object of that element. Which is seperate from widget tree
+    and stores the state of the element.
+
+    Now how rebuild is triggered in stateful widget -
+        whenever we set the state of the widget and flutter makes that element
+        dirty and rebuild the whole widget tree/(which state is set).
+        Now every widget is a class so wehever rebuild takes palce, a new object
+        of that class/widget is instantiated and 
+
+    whenever the media queries  changes the rebuild also takes palce, 
+    like orientation, and when softkeyboard appears then that also 
+    call build method 
+
+    Now rebuild happens is that when ever we hit a setstate, that widget and all the 
+    widget is create again, new in element tree the element corresponding to the 
+    stateful widget, and a state corresponding to this stateful widget will now point to
+    new stateful widget that is created and then the element corresponding to new stateful widget
+    checks if there is any changes in widget, and if there is any changes in widget then it 
+    will pass that changes to render object corresponding to that element in element tree.
+    and that changes will be rendered on phone screen.
+    
+    The Element in Element tree is smart and knows to which other widget element
+    they are connected to and which corresponding widget they are connected to,
+    and this helps flutter to render the changes only onto the screen.
+
+    Now after knowing how flutter render the widget on screen, we know
+    that rebuilding the widget tree is not a bad thing and not impact on apps performance that much.
+
+    But is always better to have some extra perfromance, now how we can add extra perfromance to
+    out app,
+
+    to add extra perfromance to our app, we can use const and const constructor,
+
+    when we know that a widget class is immutable, means it's never gonna be changed
+    so we can make all the variables inside it final and mark it's constructor as constant
+    by default the stateless widget constructor marks as const. 
+
+    Now in widet tree whenever we are creating a widget that is never going to change
+    we can add const in front of that Widget
+    Like a text widget holding some fixed text, so we can add const in front of this text
+    widget and when next time rebuild happens, then flutter can skip rebuilding this Widget
+    and can use this widget from previous widget tree because it going to be same.
+
+what is build context:
+    context is element of widget in element tree, and it is used by flutter
+    to know where a widget belong to
+
+what is key in constructor:
+    in out transaction list, we add every transaction to our list.
+    now suppose out transaction item is a stateful widget and have different color
+    in different initialization, now if we delete an item from transaction list,
+    the color of that transaction item will be given to next transaction item.
+    This happens because when we delete an item from list, rebuild was called,
+    and flutter checks from top of widget tree, what are changes in tree,
+    now each transaction item is of similar type, so when flutter checks from top to bottom,
+    in element tree, and find delete transaction item and next transaction item is of similar type, 
+    so flutter provides the current color of transaction item to next transaction item,
+    to prevent this we can pass key to every initialization of transaction item,
+    now when rebuild will be called flutter only not checks the type of widget,
+    but also check the key of widget, and if both matches, then it only provides
+    that state to that widget. Key are mostly hlepful in differentiation of widget in 
+    list of widgets.
+
+
+Provider package:
+
+    So basically in first we have a class that contain all the data, an now we want to listen
+    to changes in data so we can update our app interface accordingly. At this point 
+    our class is just a container so we have to convert it into a Provider and that where
+    we use Provider Package.
+
+    What does this Provider package does is it give use some different type of provider/class, 
+    and mian one is ChangeNotifierProvider.
+
+    Now what does this provider allow us is to register a class object to which we can listen to change in data, 
+    Here we register our data container class object in ChangeNotifierProvider, due to which we can listen to change in data in
+    child widget of this widget where we added provider.
+
+    Basically the child widget of widget can listen to change in provider.
+
+    So at this point our simple data container class is converted into a sort provider. And now we can listen to changes
+    in that data container class with help of provider.
+
+    To register a data container it might be the case that we are instantiating on the way,
+    or we are using prvious instantiated object.
